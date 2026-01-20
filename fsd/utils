@@ -1,0 +1,42 @@
+import numpy as np
+import cv2
+import os
+
+def load_image(path: str, as_float: bool = True) -> np.ndarray:
+    """
+    Load image safely. Supports standard formats.
+    """
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Image not found: {path}")
+        
+    # Read as grayscale
+    img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError(f"Failed to decode image: {path}")
+        
+    if as_float:
+        return img.astype(np.float32)
+    return img
+
+def save_image(path: str, img: np.ndarray):
+    """
+    Save image, handling normalization automatically.
+    """
+    # Normalize to 0-255 uint8 if float
+    if img.dtype != np.uint8:
+        img = np.clip(img, 0, 255).astype(np.uint8)
+    
+    cv2.imwrite(path, img)
+
+def add_gaussian_noise(img: np.ndarray, sigma: float = 25.0) -> np.ndarray:
+    """
+    Add Gaussian noise for testing.
+    """
+    noise = np.random.normal(0, sigma, img.shape).astype(np.float32)
+    noisy = img + noise
+    return np.clip(noisy, 0, 255)
+
+def normalize_01(img: np.ndarray) -> np.ndarray:
+    """Robust normalization to [0, 1]."""
+    vmin, vmax = np.percentile(img, 1), np.percentile(img, 99)
+    return np.clip((img - vmin) / (vmax - vmin + 1e-8), 0, 1)
