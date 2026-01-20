@@ -28,7 +28,7 @@ Standard derivatives (Gradient $\nabla I$) are integers ($1^{st}, 2^{nd}$ order)
 
 | Noisy Input (Simulated Low-Dose CT) | Standard Median Filter | **FSD (Ours)** |
 | :---: | :---: | :---: |
-| (image.png)  |
+||(image.png)||
 | *High noise destroys tissue details* | *Blurry, "plastic" look* | **Texture preserved, noise removed** |
 
 > *Note: FSD maintains the stochastic nature of the tissue texture, crucial for diagnostic confidence.*
