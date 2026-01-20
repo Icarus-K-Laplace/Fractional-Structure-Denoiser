@@ -11,6 +11,9 @@ A research-grade denoising framework utilizing Fractional Calculus and Structure
 **Fractional-Structure-Denoiser (FSD)** is a research-grade image restoration framework designed for **medical imaging (MRI/CT)** and **scientific microscopy**. Unlike traditional filters that blur fine details, FSD utilizes **Fractional Calculus** and **Structure Tensors** to distinguish between noise and delicate textures.
 
 ---
+## 🧩 Methodology
+
+![Algorithm Flowchart](Decision%20Options%20Flow-2026-01-20-094521.png)
 
 ## 🧠 Theory: Why Fractional?
 
