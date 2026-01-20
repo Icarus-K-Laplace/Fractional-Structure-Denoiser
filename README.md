@@ -9,6 +9,57 @@ A research-grade denoising framework utilizing Fractional Calculus and Structure
 > **"Denoising without Smoothing."**
 
 **Fractional-Structure-Denoiser (FSD)** is a research-grade image restoration framework designed for **medical imaging (MRI/CT)** and **scientific microscopy**. Unlike traditional filters that blur fine details, FSD utilizes **Fractional Calculus** and **Structure Tensors** to distinguish between noise and delicate textures.
+graph TD
+    %% 样式定义 (Style Definitions)
+    classDef input fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef process fill:#fff3e0,stroke:#ff6f00,stroke-width:2px;
+    classDef math fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,stroke-dasharray: 5 5;
+    classDef decision fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef output fill:#ffebee,stroke:#c62828,stroke-width:2px;
+
+    %% 节点定义
+    Input([Input Image <br/> Noisy, 16-bit/Float]) ::: input
+    
+    subgraph Feature_Extraction [Phase 1: Structure-Aware Feature Extraction]
+        direction TB
+        FFT[FFT Transform] ::: math
+        Frac[Fractional Derivative <br/> D^alpha] ::: math
+        IFFT[Inverse FFT] ::: math
+        Sobel[Structure Tensor <br/> Gradient Magnitude] ::: process
+        
+        Input --> FFT --> Frac --> IFFT
+        Input --> Sobel
+    end
+
+    subgraph Core_Solver [Phase 2: Iterative Restoration]
+        direction TB
+        Weight[Adaptive Weight Calculation] ::: decision
+        Poly[Polynomial Fitting <br/> (Structure Preservation)] ::: process
+        Med[Median Filter <br/> (Noise Suppression)] ::: process
+        Fusion[Weighted Fusion <br/> alpha * Poly + (1-alpha) * Med] ::: process
+        
+        IFFT --> Weight
+        Sobel --> Weight
+        
+        Weight -- High Texture --> Poly
+        Weight -- Flat Region --> Med
+        
+        Poly --> Fusion
+        Med --> Fusion
+    end
+    
+    Relax[Relaxation Update <br/> X_k+1 = (1-r)X_k + r*X_new] ::: process
+    Conv{Converged?} ::: decision
+    Output([Restored Image <br/> Texture Preserved]) ::: output
+
+    %% 连接关系
+    Fusion --> Relax
+    Relax --> Conv
+    Conv -- No --> Weight
+    Conv -- Yes --> Output
+
+    %% 布局微调
+    linkStyle default stroke:#333,stroke-width:1.5px;
 
 ---
 
